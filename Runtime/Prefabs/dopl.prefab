@@ -58,6 +58,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb633d52580ccba41bee6676d023e93c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  CatheterTipPrefab: {fileID: 0}
+  CatheterTipPrefab: {fileID: 7854479204025394675, guid: c5f5cbac8f2c0e54981805ebeebeb7ab, type: 3}
   CatheterParent: {fileID: 0}
   _dopl: {fileID: 6297261178212385737}

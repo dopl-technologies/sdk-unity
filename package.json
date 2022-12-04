@@ -1,6 +1,6 @@
 {
 	"name": "com.dopl.sdk",
-	"version": "0.0.1",
+	"version": "1.0.0",
 	"description": "Unity dopl sdk",
 	"displayName": "Dopl SDK Unity",
 	"unity": "2021.3",

@@ -13,5 +13,8 @@
 	"repository": {
 		"type": "git",
 		"url": "git://github.com/dopl-technologies/sdk-unity"
+	},
+	"dependencies": {
+		"com.itisnajim.socketiounity": "1.1.2"
 	}
 }

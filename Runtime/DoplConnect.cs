@@ -3,11 +3,69 @@ using System;
 using System.Collections.Generic;
 using SocketIOClient;
 using System.Reactive.Subjects;
-using DoplTechnologies.Protos;
 using System.Linq;
 
 public class DoplConnect : MonoBehaviour
 {
+    [Serializable]
+    public class Frame
+    {
+        public CatheterData[] catheterdataList;
+    }
+
+    [Serializable]
+    public class CatheterData
+    {
+        public uint sensorid;
+        public Coordinates coordinates;
+
+        public CatheterData(CatheterData data)
+        {
+            sensorid = data.sensorid;
+            coordinates = new Coordinates
+            {
+                position = new Position
+                {
+                    x = data.coordinates.position.x,
+                    y = data.coordinates.position.y,
+                    z = data.coordinates.position.z,
+                },
+
+                rotation = new Rotation
+                {
+                    x = data.coordinates.rotation.x,
+                    y = data.coordinates.rotation.y,
+                    z = data.coordinates.rotation.z,
+                    w = data.coordinates.rotation.w,
+                },
+            };
+        }
+    }
+
+    [Serializable]
+    public class Coordinates
+    {
+        public Position position;
+        public Rotation rotation;
+    }
+
+    [Serializable]
+    public class Position
+    {
+        public float x;
+        public float y;
+        public float z;
+    }
+
+    [Serializable]
+    public class Rotation
+    {
+        public float x;
+        public float y;
+        public float z;
+        public float w;
+    }
+
     [Tooltip("Path to a file containing the url of the dopl connect socket server")]
     public string FileWithSocketUrl = "https://plutovr.s3.us-west-2.amazonaws.com/ryan/ngrok.txt";
 
@@ -62,11 +120,13 @@ public class DoplConnect : MonoBehaviour
 
         _socket.On("onframe", (data) =>
         {
-            var frame = data.GetValue<Frame>();
+            var element = data.GetValue();
+            var json = element.GetRawText();
+            var frame = JsonUtility.FromJson<Frame>(json);
             
-            if (frame.CatheterData != null && frame.CatheterData.Count > 0)
+            if (frame.catheterdataList != null && frame.catheterdataList.Length > 0)
             {
-                OnCatheterDataEvent?.Invoke(frame.CatheterData.ToArray());
+                OnCatheterDataEvent?.Invoke(frame.catheterdataList);
             }
         });
     }

@@ -4,4 +4,5 @@ using UnityEngine;
 
 public class CatheterTip : MonoBehaviour
 {
+    public Transform Rotation;
 }

@@ -1,8 +1,8 @@
-using DoplTechnologies.Protos;
 using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static DoplConnect;
 
 public class CatheterTipManager : MonoBehaviour
 {
@@ -31,7 +31,7 @@ public class CatheterTipManager : MonoBehaviour
             _lastCatheterData = new List<CatheterData>();
             foreach(CatheterData data in catheters)
             {
-                _lastCatheterData.Add(data.Clone());
+                _lastCatheterData.Add(new CatheterData(data));
             }
         }
     }
@@ -46,26 +46,26 @@ public class CatheterTipManager : MonoBehaviour
             foreach (CatheterData catheterData in _lastCatheterData)
             {
                 CatheterTip tip;
-                if (!_catheters.TryGetValue(catheterData.SensorId, out tip))
+                if (!_catheters.TryGetValue(catheterData.sensorid, out tip))
                 {
-                    Console.WriteLine($"Creating catheter. Sensor id: {catheterData.SensorId}");
-                    tip = Instantiate<CatheterTip>(CatheterTipPrefab, new Vector3(0, 0, 0), UnityEngine.Quaternion.identity, CatheterParent);
-                    _catheters[catheterData.SensorId] = tip;
+                    Console.WriteLine($"Creating catheter. Sensor id: {catheterData.sensorid}");
+                    tip = Instantiate<CatheterTip>(CatheterTipPrefab, CatheterParent, false);
+                    _catheters[catheterData.sensorid] = tip;
                 }
 
-                var position = catheterData.Coordinates.Position;
-                var rotation = catheterData.Coordinates.Rotation;
+                var position = catheterData.coordinates.position;
+                var rotation = catheterData.coordinates.rotation;
                 tip.transform.localPosition = new Vector3(
-                    position.Y,
-                    position.X,
-                    position.Z
+                    position.x,
+                    -position.y,
+                    position.z
                 );
 
-                tip.transform.localRotation = new UnityEngine.Quaternion(
-                    rotation.Y,
-                    rotation.X,
-                    rotation.Z,
-                    rotation.W
+                tip.Rotation.transform.localRotation = new UnityEngine.Quaternion(
+                    -rotation.x,
+                    rotation.y,
+                    rotation.z,
+                    rotation.w
                 );
             }
 
